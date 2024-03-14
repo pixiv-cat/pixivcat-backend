@@ -92,7 +92,7 @@ const getIllustMulti = async (req, res) => {
         const pixivApiResponse = await pixivService.getPixivIllustIdData(req.params.illustId);
         const pixivApiResponseValidationResult = pixivApiResponseValidator(pixivApiResponse);
         if (pixivApiResponseValidationResult !== null) {
-            res.status(404).json({ error: pixivApiResponseValidationResult });
+            res.status(404).render('error', pixivApiResponseValidationResult);
             return;
         } else {
           if (pixivApiResponse.illust.page_count === 1) {
