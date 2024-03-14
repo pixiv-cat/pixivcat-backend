@@ -1,7 +1,7 @@
 function validateIllustId(req, res, next) {
     const illustId = req.params.illustId;
     // Check if the illustId contains only digits
-    if (/^\d+$/.test(illustId)) {
+    if (/^([1-9][0-9]*)$/.test(illustId)) {
       next();
     } else {
       res.status(400).render('error', {
