@@ -90,13 +90,13 @@ const getIllustSingle = async (req, res) => {
           message_en: 'API rate limit exceeded. Please try again later.',
           message_zh: 'API 請求次數超過限制，請稍後再試。',
         });
-    } else {
-      res.status(500).render('error', {
-        error_title: '500 Internal Server Error',
-        message_en: 'Internal Server Error',
-        message_zh: '伺服器內部錯誤',
-      });
+      return;
     }
+    res.status(500).render('error', {
+      error_title: '500 Internal Server Error',
+      message_en: 'Internal Server Error',
+      message_zh: '伺服器內部錯誤',
+    });
   }
 };
 
