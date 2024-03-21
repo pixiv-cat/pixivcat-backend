@@ -1,7 +1,6 @@
 const express = require('express');
-const ejs = require('ejs');
 const path = require('path');
-require('dotenv').config()
+require('dotenv').config();
 
 const showVersion = require('./src/middlewares/headerMiddleware');
 const pixivRoutes = require('./src/routes/pixivRoutes');
@@ -17,12 +16,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/', showVersion, pixivRoutes);
 
 // Error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   console.error(err.stack);
   res.status(500).send('Internal Server Error');
 });
 
 // Start the server
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
   console.log(`Server is running on ${HOST}:${PORT}`);
 });
