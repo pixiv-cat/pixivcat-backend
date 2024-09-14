@@ -1,0 +1,26 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - memcached
+    environment:
+      - HOST=${HOST}
+      - PORT=${PORT}
+      - MEMCACHED_HOST=memcached
+      - MEMCACHED_PORT=${MEMCACHED_PORT}
+      - MEMCACHED_NAMESPACE=${MEMCACHED_NAMESPACE}
+      - REFRESH_TOKENS=${REFRESH_TOKENS}
+    networks:
+      - app-network
+
+  memcached:
+    image: memcached
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
