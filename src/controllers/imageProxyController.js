@@ -79,7 +79,16 @@ const getIllustSingle = async (req, res) => {
       'X-Crawl-Date': new Date().toUTCString(),
       ...responseHeaders,
     });
-    imageResponse.data.pipe(res, { end: true });
+    imageResponse.data.pipe(res).on('finish', () => {
+      res.end();
+    }).on('error', (err) => {
+      console.error('Stream Error:', err);
+      res.status(500).render('error', {
+        error_title: '500 Internal Server Error',
+        message_en: 'Internal Server Error',
+        message_zh: '伺服器內部錯誤',
+      });
+    });
   } catch (error) {
     console.error('Illust proxy controller error:', error);
     if (error.message === 'Pixiv API rate limit exceeded.') {
@@ -138,7 +147,16 @@ const getIllustMulti = async (req, res) => {
       'X-Crawl-Date': new Date().toUTCString(),
       ...responseHeaders,
     });
-    imageResponse.data.pipe(res, { end: true });
+    imageResponse.data.pipe(res).on('finish', () => {
+      res.end();
+    }).on('error', (err) => {
+      console.error('Stream Error:', err);
+      res.status(500).render('error', {
+        error_title: '500 Internal Server Error',
+        message_en: 'Internal Server Error',
+        message_zh: '伺服器內部錯誤',
+      });
+    });
   } catch (error) {
     console.error('Illust proxy controller error:', error);
     if (error.message === 'Pixiv API rate limit exceeded.') {
