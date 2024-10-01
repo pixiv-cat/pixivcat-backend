@@ -12,7 +12,7 @@
   "dependencies": {
     "axios": "^1.6.7",
     "dotenv": "^16.4.5",
-    "ejs": "^3.1.9",
+    "ejs": "^3.1.10",
     "express": "^4.21.0",
     "memcached": "^2.2.2",
     "qs": "^6.12.0"
