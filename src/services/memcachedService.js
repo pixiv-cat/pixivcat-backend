@@ -1,6 +1,6 @@
 const Memcached = require('memcached');
 
-const memcached = new Memcached(`${process.env.MEMCACHED_HOST}:${process.env.MEMCACHED_PORT}`, {retries: 1});
+const memcached = new Memcached(`${process.env.MEMCACHED_HOST}:${process.env.MEMCACHED_PORT}`, { retries: 1 });
 
 const generateKey = (key) => `${process.env.MEMCACHED_NAMESPACE}:${key}`;
 
