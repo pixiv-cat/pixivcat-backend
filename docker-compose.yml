@@ -1,13 +1,12 @@
-version: '3'
 services:
   app:
     build: .
     ports:
-      - "127.0.0.1:${PORT}:${PORT}"
+      - "${HOST}:${PORT}:${PORT}"
     depends_on:
       - memcached
     environment:
-      - HOST=${HOST}
+      - HOST=0.0.0.0 # Keep this 0.0.0.0 for Express
       - PORT=${PORT}
       - MEMCACHED_HOST=memcached
       - MEMCACHED_PORT=${MEMCACHED_PORT}
@@ -15,6 +14,11 @@ services:
       - REFRESH_TOKENS=${REFRESH_TOKENS}
     networks:
       - app-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   memcached:
     image: memcached
