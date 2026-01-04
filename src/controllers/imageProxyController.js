@@ -79,16 +79,35 @@ const getIllustSingle = async (req, res) => {
       'X-Crawl-Date': new Date().toUTCString(),
       ...responseHeaders,
     });
-    imageResponse.data.pipe(res).on('finish', () => {
-      res.end();
-    }).on('error', (err) => {
-      console.error('Stream Error:', err);
-      res.status(500).render('error', {
-        error_title: '500 Internal Server Error',
-        message_en: 'Internal Server Error',
-        message_zh: '伺服器內部錯誤',
-      });
+
+    const sourceStream = imageResponse.data;
+
+    // Handle source stream errors
+    sourceStream.on('error', (err) => {
+      console.error('Source stream error:', err);
+      sourceStream.destroy();
+      // Can't send error page after headers are sent, just end the response
+      if (!res.headersSent) {
+        res.status(500).render('error', {
+          error_title: '500 Internal Server Error',
+          message_en: 'Internal Server Error',
+          message_zh: '伺服器內部錯誤',
+        });
+      } else {
+        res.end();
+      }
     });
+
+    // Handle client disconnect - destroy source stream to prevent memory leak
+    res.on('close', () => {
+      if (!sourceStream.destroyed) {
+        console.log('Client closed connection, destroying stream');
+        sourceStream.destroy();
+      }
+    });
+
+    // Pipe the stream
+    sourceStream.pipe(res);
   } catch (error) {
     console.error('Illust proxy controller error:', error);
     if (error.message === 'Pixiv API rate limit exceeded.') {
@@ -147,16 +166,35 @@ const getIllustMulti = async (req, res) => {
       'X-Crawl-Date': new Date().toUTCString(),
       ...responseHeaders,
     });
-    imageResponse.data.pipe(res).on('finish', () => {
-      res.end();
-    }).on('error', (err) => {
-      console.error('Stream Error:', err);
-      res.status(500).render('error', {
-        error_title: '500 Internal Server Error',
-        message_en: 'Internal Server Error',
-        message_zh: '伺服器內部錯誤',
-      });
+
+    const sourceStream = imageResponse.data;
+
+    // Handle source stream errors
+    sourceStream.on('error', (err) => {
+      console.error('Source stream error:', err);
+      sourceStream.destroy();
+      // Can't send error page after headers are sent, just end the response
+      if (!res.headersSent) {
+        res.status(500).render('error', {
+          error_title: '500 Internal Server Error',
+          message_en: 'Internal Server Error',
+          message_zh: '伺服器內部錯誤',
+        });
+      } else {
+        res.end();
+      }
     });
+
+    // Handle client disconnect - destroy source stream to prevent memory leak
+    res.on('close', () => {
+      if (!sourceStream.destroyed) {
+        console.log('Client closed connection, destroying stream');
+        sourceStream.destroy();
+      }
+    });
+
+    // Pipe the stream
+    sourceStream.pipe(res);
   } catch (error) {
     console.error('Illust proxy controller error:', error);
     if (error.message === 'Pixiv API rate limit exceeded.') {
