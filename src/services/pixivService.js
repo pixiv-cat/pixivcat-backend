@@ -28,11 +28,11 @@ const getPixivIllustIdData = async (illustId, cache = true) => {
   } catch (error) {
     if (error.response.status === 403 && error.response.data && error.response.data.error && error.response.data.error.message === 'Rate Limit') {
       // API Rate limit exceeded
-      throw new Error('Pixiv API rate limit exceeded.');
+      throw new Error('Pixiv API rate limit exceeded.', { cause: error });
     } else {
       // Other errors
       console.error('Pixiv service error:', error);
-      throw new Error('Pixiv API request failed');
+      throw new Error('Pixiv API request failed', { cause: error });
     }
   }
 };
