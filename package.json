@@ -16,7 +16,7 @@
     "ejs": "^5.0.2",
     "express": "^5.2.1",
     "memcached": "^2.2.2",
-    "qs": "^6.15.1"
+    "qs": "^6.15.2"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
